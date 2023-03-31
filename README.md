@@ -2,6 +2,7 @@
 # [SWEN30006 2023S1] Project Assignment 1
 PacMan in the Multiverse
 # Team Members
-- 1234567 Student A (<student.a@student.unimelb.edu.au>)
-- 1234567 Student B (<student.b@student.unimelb.edu.au>)
-- 1234567 Student C (<student.c@student.unimelb.edu.au>)
+- 1341243 Supakorn Sumongkol (ssumongkol@student.unimelb.edu.au)
+- 1214247 Xierui Sun (xieruis@student.unimelb.edu.au)
+- 1214289 Shanaia Chen (chenso@student.unimelb.edu.au)
+
