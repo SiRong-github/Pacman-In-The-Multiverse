@@ -11,13 +11,14 @@ import java.util.Properties;
 
 public class Game extends GameGrid
 {
+  // game window size
   private final static int nbHorzCells = 20;
   private final static int nbVertCells = 11;
   protected PacManGameGrid grid = new PacManGameGrid(nbHorzCells, nbVertCells);
 
   protected PacActor pacActor = new PacActor(this);
-  private Monster troll = new Monster(this, MonsterType.Troll);
-  private Monster tx5 = new Monster(this, MonsterType.TX5);
+  private Troll troll = new Troll(this);
+  private TX5 tx5 = new TX5(this);
 
 
   private ArrayList<Location> pillAndItemLocations = new ArrayList<Location>();

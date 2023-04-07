@@ -2,11 +2,16 @@
 // Used for PacMan
 package src;
 
-import ch.aplu.jgamegrid.*;
-import java.awt.Color;
-import java.util.*;
+import ch.aplu.jgamegrid.Actor;
+import ch.aplu.jgamegrid.Location;
 
-public abstract class Monster extends Actor
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
+
+public class Monster_Backup extends Actor
 {
   private Game game;
   private MonsterType type;
@@ -16,30 +21,18 @@ public abstract class Monster extends Actor
   private int seed = 0;
   private Random randomiser = new Random(0);
 
-  public Monster(Game game, MonsterType type)
+  public Monster_Backup(Game game, MonsterType type)
   {
     super("sprites/" + type.getImageName());
     this.game = game;
     this.type = type;
   }
 
-  public Game getGame() {
-    return game;
-  }
-
-  public MonsterType getType() {
-    return type;
-  }
-
-  public Random getRandomiser() {
-    return randomiser;
-  }
-
   public void stopMoving(int seconds) {
     this.stopMoving = true;
     Timer timer = new Timer(); // Instantiate Timer Object
     int SECOND_TO_MILLISECONDS = 1000;
-    final Monster monster = this;
+    final Monster_Backup monster = this;
     timer.schedule(new TimerTask() {
       @Override
       public void run() {
@@ -69,52 +62,78 @@ public abstract class Monster extends Actor
       setHorzMirror(true);
   }
 
-  protected abstract void walkApproach();
-
-  protected void randomWalk(Location next) {
+  private void walkApproach()
+  {
+    Location pacLocation = game.pacActor.getLocation();
     double oldDirection = getDirection();
-    // Random walk
-    int sign = getRandomiser().nextDouble() < 0.5 ? 1 : -1;
-    setDirection(oldDirection);
-    turn(sign * 90);  // Try to turn left/right
-    next = getNextMoveLocation();
-    if (canMove(next))
+
+    // Walking approach:
+    // TX5: Determine direction to pacActor and try to move in that direction. Otherwise, random walk.
+    // Troll: Random walk.
+    Location.CompassDirection compassDir =
+      getLocation().get4CompassDirectionTo(pacLocation);
+    Location next = getLocation().getNeighbourLocation(compassDir);
+    setDirection(compassDir);
+    if (type == MonsterType.TX5 &&
+      !isVisited(next) && canMove(next))
     {
       setLocation(next);
     }
-    else {
+    else
+    {
+      // Random walk
+      int sign = randomiser.nextDouble() < 0.5 ? 1 : -1;
       setDirection(oldDirection);
+      turn(sign * 90);  // Try to turn left/right
       next = getNextMoveLocation();
-      if (canMove(next)) // Try to move forward
+      if (canMove(next))
       {
         setLocation(next);
-      } else {
+      }
+      else
+      {
         setDirection(oldDirection);
-        turn(-sign * 90);  // Try to turn right/left
         next = getNextMoveLocation();
-        if (canMove(next)) {
+        if (canMove(next)) // Try to move forward
+        {
           setLocation(next);
-        } else {
-
+        }
+        else
+        {
           setDirection(oldDirection);
-          turn(180);  // Turn backward
+          turn(-sign * 90);  // Try to turn right/left
           next = getNextMoveLocation();
-          setLocation(next);
+          if (canMove(next))
+          {
+            setLocation(next);
+          }
+          else
+          {
+
+            setDirection(oldDirection);
+            turn(180);  // Turn backward
+            next = getNextMoveLocation();
+            setLocation(next);
+          }
         }
       }
     }
-    game.getGameCallback().monsterLocationChanged(this);
+    //game.getGameCallback().monsterLocationChanged(this);
     addVisitedList(next);
   }
 
-  protected void addVisitedList(Location location)
+  public MonsterType getType() {
+    return type;
+  }
+
+  private void addVisitedList(Location location)
   {
     visitedList.add(location);
     if (visitedList.size() == listLength)
       visitedList.remove(0);
   }
 
-  protected boolean isVisited(Location location)
+  private boolean isVisited(Location location)
   {
     for (Location loc : visitedList)
       if (loc.equals(location))
@@ -122,7 +141,7 @@ public abstract class Monster extends Actor
     return false;
   }
 
-  protected boolean canMove(Location location)
+  private boolean canMove(Location location)
   {
     Color c = getBackground().getColor(location);
     if (c.equals(Color.gray) || location.getX() >= game.getNumHorzCells()
