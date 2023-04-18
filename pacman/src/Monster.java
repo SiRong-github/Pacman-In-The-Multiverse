@@ -78,6 +78,7 @@ public abstract class Monster extends Actor
 
   public void enterFurious(int seconds) {
     this.furiousState = true;
+    System.out.println("furious state");
     Timer timer = new Timer(); // Instantiate Timer Object
     int SECOND_TO_MILLISECONDS = 1000;
     final Monster monster = this;
@@ -145,8 +146,8 @@ public abstract class Monster extends Actor
         }
       }
       if (this.monsterType == MonsterType.TX5) {
-        System.out.println("TX5 (RandomWalk) moveTry: " + moveTry);
-        System.out.println("TX5 current direction: " + currentDirection);
+//        System.out.println("TX5 (RandomWalk) moveTry: " + moveTry);
+//        System.out.println("TX5 current direction: " + currentDirection);
       }
       moveTry++;
     }

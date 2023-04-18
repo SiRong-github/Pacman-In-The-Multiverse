@@ -59,7 +59,7 @@ public class TX5 extends Monster{
             if (!isVisited(next) && canMove(next)) {
                 setLocation(next);
             } else {
-                System.out.println("TX5: entered randomWalk");
+//                System.out.println("TX5: entered randomWalk");
                 next = randomWalk(oldDirection);
             }
         }
