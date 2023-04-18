@@ -25,6 +25,7 @@ public class PacActor extends Actor implements GGKeyRepeatListener
   private Random randomiser = new Random();
   public PacActor(Game game)
   {
+    // construct actor based on 1 or more sprite images
     super(true, "sprites/pacpix.gif", nbSprites);  // Rotatable
     this.game = game;
   }
@@ -40,6 +41,7 @@ public class PacActor extends Actor implements GGKeyRepeatListener
     randomiser.setSeed(seed);
   }
 
+  // for get list of String that represent AutoMove of PacMan
   public void setPropertyMoves(String propertyMoveString) {
     if (propertyMoveString != null) {
       this.propertyMoves = Arrays.asList(propertyMoveString.split(","));
@@ -57,6 +59,7 @@ public class PacActor extends Actor implements GGKeyRepeatListener
     switch (keyCode)
     {
       case KeyEvent.VK_LEFT:
+        // return neighbour location of the passed direction
         next = getLocation().getNeighbourLocation(Location.WEST);
         setDirection(Location.WEST);
         break;
@@ -80,8 +83,10 @@ public class PacActor extends Actor implements GGKeyRepeatListener
     }
   }
 
+  // actual function that move PacMan
   public void act()
   {
+    // Turns on the visibility of the sprite with given id
     show(idSprite);
     idSprite++;
     if (idSprite == nbSprites)
@@ -93,14 +98,15 @@ public class PacActor extends Actor implements GGKeyRepeatListener
     this.game.getGameCallback().pacManLocationChanged(getLocation(), score, nbPills);
   }
 
+  // get item with closed distance (loop through getPillAndItemLocations()
   private Location closestPillLocation() {
     int currentDistance = 1000;
     Location currentLocation = null;
-    List<Location> pillAndItemLocations = game.getPillAndItemLocations();
-    for (Location location: pillAndItemLocations) {
-      int distanceToPill = location.getDistanceTo(getLocation());
+    List<Item> itemList = game.getItemList();
+    for (Item item: itemList) {
+      int distanceToPill = item.getLocation().getDistanceTo(getLocation());
       if (distanceToPill < currentDistance) {
-        currentLocation = location;
+        currentLocation = item.getLocation();
         currentDistance = distanceToPill;
       }
     }
@@ -108,6 +114,7 @@ public class PacActor extends Actor implements GGKeyRepeatListener
     return currentLocation;
   }
 
+  // move PacMan as the String[] passed
   private void followPropertyMoves() {
     String currentMove = propertyMoves.get(propertyMoveIndex);
     switch(currentMove) {
@@ -118,6 +125,7 @@ public class PacActor extends Actor implements GGKeyRepeatListener
         turn(-90);
         break;
       case "M":
+        // get Location (object) of next move
         Location next = getNextMoveLocation();
         if (canMove(next)) {
           setLocation(next);
@@ -136,6 +144,7 @@ public class PacActor extends Actor implements GGKeyRepeatListener
     Location closestPill = closestPillLocation();
     double oldDirection = getDirection();
 
+    // get CompassDir for moving to closet item
     Location.CompassDirection compassDir =
             getLocation().get4CompassDirectionTo(closestPill);
     Location next = getLocation().getNeighbourLocation(compassDir);
@@ -190,6 +199,7 @@ public class PacActor extends Actor implements GGKeyRepeatListener
     return false;
   }
 
+  // check whether the location is movable or not
   private boolean canMove(Location location)
   {
     Color c = getBackground().getColor(location);
@@ -204,6 +214,7 @@ public class PacActor extends Actor implements GGKeyRepeatListener
     return nbPills;
   }
 
+  // function for PacMan to eat item, update score & number of item ate, update cell color (remove item), and update score
   private void eatPill(Location location)
   {
     Color c = getBackground().getColor(location);
@@ -218,11 +229,11 @@ public class PacActor extends Actor implements GGKeyRepeatListener
       score+= 5;
       getBackground().fillCell(location, Color.lightGray);
       game.getGameCallback().pacManEatPillsAndItems(location, "gold");
-      game.removeItem("gold",location);
+      game.removeItem(ItemType.GOLD,location);
     } else if (c.equals(Color.blue)) {
       getBackground().fillCell(location, Color.lightGray);
       game.getGameCallback().pacManEatPillsAndItems(location, "ice");
-      game.removeItem("ice",location);
+      game.removeItem(ItemType.ICE,location);
     }
     String title = "[PacMan in the Multiverse] Current score: " + score;
     gameGrid.setTitle(title);

@@ -6,13 +6,16 @@ import src.utility.PropertiesLoader;
 import java.util.Properties;
 
 public class Driver {
-    public static final String DEFAULT_PROPERTIES_PATH = "pacman/properties/test4.properties";
+    public static final String DEFAULT_PROPERTIES_PATH = "pacman/properties/test5.properties";
 
     /**
      * Starting point
      * @param args the command line arguments
      */
 
+    /**
+     * read in properties file and initiate the game
+     */
     public static void main(String args[]) {
         String propertiesPath = DEFAULT_PROPERTIES_PATH;
         if (args.length > 0) {
