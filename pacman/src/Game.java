@@ -138,7 +138,7 @@ public class Game extends GameGrid
     if (version.equals(gameVersion[1])) {
 //      monsterList.add(new Orion(this));
       monsterList.add(new Alien(this));
-//      monsterList.add(new Wizard(this));
+      monsterList.add(new Wizard(this));
     }
   }
 
@@ -173,9 +173,9 @@ public class Game extends GameGrid
         case 4:
           addActor(monsterList.get(2), new Location(charX, charY), Location.NORTH);
           break;
-//        case 5:
-//          addActor(new Wizard(this), new Location(charX, charY), Location.NORTH);
-//          break;
+       case 5:
+          addActor(monsterList.get(3), new Location(charX, charY), Location.NORTH);
+          break;
       }
     }
   }

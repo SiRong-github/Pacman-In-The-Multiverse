@@ -10,11 +10,10 @@ public class Wizard extends Monster {
     private final double direction = 0;
     private ArrayList<Location> neighbours = new ArrayList<>();
     private Location next = null;
-    private Game game;
 
-    Location wizardLoc = getLocation();
+
     /* Randomiser */
-    int chosen = getRandomiser().nextInt() < 0 ? 0 : 1;
+    int chosen = getRandomiser().nextInt(7);
     public Wizard(Game game) {
         super(game, monsterType, image);
     }
@@ -43,7 +42,7 @@ public class Wizard extends Monster {
             Color c = getBackground().getColor(next);
             if (c.equals(Color.gray)) { //wall
                 /* Check if not outside of grid */
-                if (next.getX() < game.getNumHorzCells() && next.getY() < game.getNumVertCells()) {
+               // if (next.getX() < game.getNumHorzCells() && next.getY() < game.getNumVertCells()) {
                     /* Get direction */
                     Location adjacentLocation = next.getAdjacentLocation(direction);
                     if (canMove(adjacentLocation)) {
@@ -52,13 +51,18 @@ public class Wizard extends Monster {
                     } else {
                         for (Location n: neighbours) {
                             next = n.getNeighbourLocation(chosen);
+                            if(canMove(next)){
+                                setLocation(next);
+                                break;
+                            }
                         }
                     }
 
                 }
+
             }
+        getGame().getGameCallback().monsterLocationChanged(this);
         }
-    }
 }
 
 
