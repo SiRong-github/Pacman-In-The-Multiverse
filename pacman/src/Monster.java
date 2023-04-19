@@ -132,7 +132,7 @@ public abstract class Monster extends Actor
       currentDirection = getDirection();
       next = getLocation().getNeighbourLocation(currentDirection);
       if (canMove(next)) {
-        if (isFuriousState() == true && getGame().getCurrentGameVersion().equals(getGame().getGameVersion()[1])) {
+        if (isFuriousState() == true) {
           // 2 block move is it valid or not, if YES move to that location & exit, otherwise find new direction
           next = next.getNeighbourLocation(currentDirection);
           if (canMove(next)) {
@@ -144,13 +144,18 @@ public abstract class Monster extends Actor
           break;
         }
       }
-      if (this.monsterType == MonsterType.TX5) {
-        System.out.println("TX5 (RandomWalk) moveTry: " + moveTry);
-        System.out.println("TX5 current direction: " + currentDirection);
-      }
       moveTry++;
     }
     return next;
+  }
+
+  protected boolean invalidLocation()
+  {
+    Location location = getLocation();
+    if (canMove(location)) {
+      return false;
+    }
+    return true;
   }
 
   protected void addVisitedList(Location location)

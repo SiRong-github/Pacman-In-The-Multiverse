@@ -2,7 +2,12 @@ package src;
 
 import ch.aplu.jgamegrid.Location;
 
+import java.util.ArrayList;
+
 public class Orion extends Monster{
+    private Gold targetGold = null;
+    private boolean isMoveAround = false;
+    private Location lastVisitedLocation = null;
     private static String image = "sprites/m_orion.gif";
     private static MonsterType monsterType = MonsterType.ORION;
 
@@ -21,14 +26,50 @@ public class Orion extends Monster{
      */
     protected void walkApproach()
     {
-        Location pacLocation = getGame().pacActor.getLocation();
+        // randomly pick targetGold for Orion to visit, if don't have one
+        if (targetGold == null) {
+            // check if all gold is visited or not, if YES start over the search again (reset orionVisitedFlag)
+            int orionVisitedGoldTotal = 0;
+            for (Gold gold : getGame().getGoldList()) {
+                if (gold.isOrionVisited()) {
+                    orionVisitedGoldTotal++;
+                }
+            }
+            if (orionVisitedGoldTotal == getGame().getGoldList().size()) {
+                for (Gold gold : getGame().getGoldList()) {
+                    gold.setOrionVisited(false);
+                }
+            }
+
+            // create high priority gold that Orion need to visit
+            ArrayList<Gold> priorityGoldList = new ArrayList<Gold>();
+            for (Gold gold : getGame().getGoldList()) {
+                if (gold.isAvailable() && !gold.isOrionVisited()) {
+                    priorityGoldList.add(gold);
+                }
+            }
+
+            // if there is no available gold, Orion will randomly gold that already eaten instead
+            if (priorityGoldList.size() == 0) {
+                for (Gold gold : getGame().getGoldList()) {
+                    if (!gold.isAvailable() && !gold.isOrionVisited()) {
+                        priorityGoldList.add(gold);
+                    }
+                }
+            }
+
+            int goldVisitedIndex = getRandomiser().nextInt(priorityGoldList.size());
+            targetGold = priorityGoldList.remove(goldVisitedIndex);
+        }
+
+        Location targetGoldLocation = targetGold.getLocation();
         double oldDirection = getDirection();
-        Location.CompassDirection compassDir = getLocation().get4CompassDirectionTo(pacLocation);
-        Location next = getLocation().getNeighbourLocation(compassDir);
-        setDirection(compassDir);
+        Location.CompassDirection goldCompassDir = getLocation().get4CompassDirectionTo(targetGoldLocation);
+        Location next = getLocation().getNeighbourLocation(goldCompassDir);
+        setDirection(goldCompassDir);
         if (isFuriousState() == true) {
             if (canMove(next)) {
-                next = next.getNeighbourLocation(compassDir);
+                next = next.getNeighbourLocation(goldCompassDir);
                 if (!isVisited(next) && canMove(next)) {
                     setLocation(next);
                 } else {
@@ -41,11 +82,25 @@ public class Orion extends Monster{
             if (!isVisited(next) && canMove(next)) {
                 setLocation(next);
             } else {
-                System.out.println("TX5: entered randomWalk");
                 next = randomWalk(oldDirection);
             }
         }
         getGame().getGameCallback().monsterLocationChanged(this);
         addVisitedList(next);
+        System.out.println("target gold location: " + targetGoldLocation);
+
+        if (getLocation().equals(targetGoldLocation)) {
+            targetGold.setOrionVisited(true);
+            targetGold = null;
+        }
+    }
+
+    @Override
+    protected void addVisitedList(Location location)
+    {
+        getVisitedList().add(location);
+        if (getVisitedList().size() == 20)
+            getVisitedList().remove(0);
     }
 }
+

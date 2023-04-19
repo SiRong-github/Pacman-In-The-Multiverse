@@ -6,6 +6,7 @@ import ch.aplu.jgamegrid.Location;
 public class Item extends Actor {
     private Location location;
     private ItemType itemType;
+    private boolean isAvailable = true;
 
     public Item(Location location, ItemType item) {
         this.location = location;
@@ -25,5 +26,13 @@ public class Item extends Actor {
     @Override
     public Location getLocation() {
         return location;
+    }
+
+    public boolean isAvailable() {
+        return isAvailable;
+    }
+
+    public void setAvailable(boolean available) {
+        isAvailable = available;
     }
 }

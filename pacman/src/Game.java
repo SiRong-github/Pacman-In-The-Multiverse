@@ -19,13 +19,11 @@ public class Game extends GameGrid
   protected PacActor pacActor = new PacActor(this);
 
   private ArrayList<Monster> monsterList = new ArrayList<Monster>();
-
   private ArrayList<Item> itemList = new ArrayList<Item>();
+  private ArrayList<Gold> goldList = new ArrayList<Gold>();
 
   private GameCallback gameCallback;
   private Properties properties;
-
-  // initiate random seed
   private int seed = 30006;
 
   private int propertyPillNumber = 0;
@@ -45,8 +43,6 @@ public class Game extends GameGrid
     this.gameCallback = gameCallback;
     this.properties = properties;
     this.currentGameVersion = properties.getProperty("version");
-    initializeMonster(currentGameVersion);
-    // set period of simulation loop (millisec) == each loop is 1 sec
     setSimulationPeriod(100);
     setTitle("[PacMan in the Multiverse]");
 
@@ -64,6 +60,7 @@ public class Game extends GameGrid
     pacActor.setSlowDown(3);
     addKeyRepeatListener(pacActor);
     setKeyRepeatPeriod(150);
+    setupActorLocations(bg, currentGameVersion);
     for (Monster monster: monsterList) {
       monster.setSeed(seed);
       monster.setSlowDown(3);
@@ -71,7 +68,6 @@ public class Game extends GameGrid
         monster.stopMoving(5);
       }
     }
-    setupActorLocations(currentGameVersion);
 
 
     //Run the game
@@ -132,20 +128,16 @@ public class Game extends GameGrid
     return gameVersion;
   }
 
-  private void initializeMonster(String version) {
-    monsterList.add(new Troll(this));
-    monsterList.add(new TX5(this));
-    if (version.equals(gameVersion[1])) {
-//      monsterList.add(new Orion(this));
-//      monsterList.add(new Alien(this));
-//      monsterList.add(new Wizard(this));
-    }
+  public ArrayList<Gold> getGoldList() {
+    return goldList;
   }
 
   // read Character Location and stored in String[] --> add Actor into matched ArrayList<Actor> with its location & moving direction
-  private void setupActorLocations(String version) {
+  private void setupActorLocations(GGBackground bg, String version) {
     String[] charLocations;
     int initializeLength, charX, charY;
+    Monster monster = null;
+    Location charLocation;
 
     if (version.equals(gameVersion[1])) {
       initializeLength = charKeyword.length;
@@ -157,25 +149,32 @@ public class Game extends GameGrid
       charLocations = this.properties.getProperty(charKeyword[i]).split(",");
       charX = Integer.parseInt(charLocations[0]);
       charY = Integer.parseInt(charLocations[1]);
-      switch (i) {
-        case 0:
-          addActor(pacActor, new Location(charX, charY));
-          break;
-        case 1:
-          addActor(monsterList.get(0), new Location(charX, charY), Location.NORTH);
-          break;
-        case 2:
-          addActor(monsterList.get(1), new Location(charX, charY), Location.NORTH);
-          break;
-//        case 3:
-//          addActor(new Orion(this), new Location(charX, charY), Location.NORTH);
-//          break;
-//        case 4:
-//          addActor(new Alien(this), new Location(charX, charY), Location.NORTH);
-//          break;
-//        case 5:
-//          addActor(new Wizard(this), new Location(charX, charY), Location.NORTH);
-//          break;
+      charLocation = new Location(charX, charY);
+      if (i == 0) {
+        addActor(pacActor, charLocation);
+      } else {
+        switch (i-1) {
+          case 0:
+            monster = new Troll(this);
+            break;
+          case 1:
+            monster = new TX5(this);
+            break;
+          case 2:
+            monster = new Orion(this);
+            break;
+          case 3:
+            monster = new Alien(this);
+            break;
+          case 4:
+            monster = new Wizard(this);
+            break;
+        }
+        Color c = bg.getColor(charLocation);
+        if (!c.equals(Color.gray) && charX >= 0 && charX < nbHorzCells && charY >= 0 && charY < nbVertCells) {
+          monsterList.add(monster);
+          addActor(monster, charLocation, Location.NORTH);
+        }
       }
     }
   }
@@ -213,6 +212,7 @@ public class Game extends GameGrid
               break;
             case 1:
               itemList.add(new Gold(new Location(itemX, itemY)));
+              goldList.add(new Gold(new Location(itemX, itemY)));
               propertyGoldNumber++;
               break;
             case 2:
@@ -235,6 +235,7 @@ public class Game extends GameGrid
         }
         if (a == 3 &&  propertyGoldNumber == 0) {
           itemList.add(new Gold(location));
+          goldList.add(new Gold(location));
         }
         if (a == 4) {
           itemList.add(new Ice(location));
@@ -288,15 +289,25 @@ public class Game extends GameGrid
   public void removeItem(ItemType checkItemType, Location location){
     for (Item item : itemList){
       if (item.getItemType() == checkItemType && location.equals(item.getLocation())) {
+        item.setAvailable(false);
         item.hide();
         if (item.getItemType() == ItemType.ICE && currentGameVersion.equals(gameVersion[1])) {
+          item.setAvailable(false);
           for (Monster monster : monsterList) {
             monster.stopMoving(3);
           }
         } else if (item.getItemType() == ItemType.GOLD && currentGameVersion.equals(gameVersion[1])) {
+          item.setAvailable(false);
           for (Monster monster : monsterList) {
             monster.enterFurious(3);
           }
+        }
+      }
+    }
+    if (checkItemType == ItemType.GOLD) {
+      for (Gold gold : goldList) {
+        if (location.equals(gold.getLocation()) && currentGameVersion.equals(gameVersion[1])) {
+          gold.setAvailable(false);
         }
       }
     }
