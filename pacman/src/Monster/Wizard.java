@@ -1,7 +1,10 @@
-package src;
+package src.Monster;
 import ch.aplu.jgamegrid.*;
+import src.Game;
+import src.Monster.Monster;
+import src.Monster.MonsterType;
+
 import java.util.ArrayList;
-import java.util.List;
 import java.awt.*;
 
 public class Wizard extends Monster {

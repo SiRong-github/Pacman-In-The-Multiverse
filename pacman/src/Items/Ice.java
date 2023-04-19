@@ -1,8 +1,8 @@
-package src;
+package src.Items;
 
 import ch.aplu.jgamegrid.Location;
 
-public class Ice extends Item{
+public class Ice extends Item {
     private static String image = "sprites/ice.png";
     private static ItemType itemType = ItemType.ICE;
 

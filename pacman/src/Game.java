@@ -3,6 +3,8 @@
 package src;
 
 import ch.aplu.jgamegrid.*;
+import src.Items.*;
+import src.Monster.*;
 import src.utility.GameCallback;
 
 import java.awt.*;
@@ -16,7 +18,7 @@ public class Game extends GameGrid
   private final static int nbVertCells = 11;
   protected PacManGameGrid grid = new PacManGameGrid(nbHorzCells, nbVertCells);
 
-  protected PacActor pacActor = new PacActor(this);
+  public PacActor pacActor = new PacActor(this);
 
   private ArrayList<Monster> monsterList = new ArrayList<Monster>();
   private ArrayList<Item> itemList = new ArrayList<Item>();
@@ -173,6 +175,7 @@ public class Game extends GameGrid
         Color c = bg.getColor(charLocation);
         if (!c.equals(Color.gray) && charX >= 0 && charX < nbHorzCells && charY >= 0 && charY < nbVertCells) {
           monsterList.add(monster);
+          System.out.println("monster "+monster.getType());
           addActor(monster, charLocation, Location.NORTH);
         }
       }

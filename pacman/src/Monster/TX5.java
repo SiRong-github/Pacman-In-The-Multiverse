@@ -1,8 +1,11 @@
-package src;
+package src.Monster;
 
 import ch.aplu.jgamegrid.Location;
+import src.Game;
+import src.Monster.Monster;
+import src.Monster.MonsterType;
 
-public class TX5 extends Monster{
+public class TX5 extends Monster {
 
     private static String image = "sprites/m_tx5.gif";
     private static MonsterType monsterType = MonsterType.TX5;

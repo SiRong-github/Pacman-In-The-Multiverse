@@ -1,10 +1,12 @@
-package src;
+package src.Monster;
 
 import ch.aplu.jgamegrid.Location;
+import src.Game;
+import src.Items.Gold;
 
 import java.util.ArrayList;
 
-public class Orion extends Monster{
+public class Orion extends Monster {
     private Gold targetGold = null;
     private boolean isMoveAround = false;
     private Location lastVisitedLocation = null;

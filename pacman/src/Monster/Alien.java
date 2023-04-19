@@ -1,8 +1,8 @@
-package src;
+package src.Monster;
 
 import ch.aplu.jgamegrid.*;
+import src.Game;
 
-import java.awt.*;
 import java.util.*;
 
 /**

@@ -1,9 +1,10 @@
 // Monster.java
 // Used for PacMan
-package src;
+package src.Monster;
 
 import ch.aplu.jgamegrid.Actor;
 import ch.aplu.jgamegrid.Location;
+import src.Game;
 
 import java.awt.*;
 import java.util.ArrayList;

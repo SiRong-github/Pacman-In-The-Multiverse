@@ -1,4 +1,4 @@
-package src;
+package src.Monster;
 
 public enum MonsterType {
     Troll,

@@ -1,7 +1,7 @@
 package src.utility;
 
 import ch.aplu.jgamegrid.Location;
-import src.Monster;
+import src.Monster.Monster;
 
 import java.io.File;
 import java.io.FileWriter;

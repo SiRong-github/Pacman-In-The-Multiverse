@@ -3,6 +3,9 @@
 package src;
 
 import ch.aplu.jgamegrid.*;
+import src.Items.Item;
+import src.Items.ItemType;
+
 import java.awt.event.KeyEvent;
 import java.awt.Color;
 import java.util.ArrayList;
