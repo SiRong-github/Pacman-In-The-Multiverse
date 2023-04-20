@@ -138,6 +138,7 @@ public class Game extends GameGrid
   private void setupActorLocations(GGBackground bg, String version) {
     String[] charLocations;
     int initializeLength, charX, charY;
+    MonsterFactory monsterFactory = new MonsterFactory(this);
     Monster monster = null;
     Location charLocation;
 
@@ -155,23 +156,7 @@ public class Game extends GameGrid
       if (i == 0) {
         addActor(pacActor, charLocation);
       } else {
-        switch (i-1) {
-          case 0:
-            monster = new Troll(this);
-            break;
-          case 1:
-            monster = new TX5(this);
-            break;
-          case 2:
-            monster = new Orion(this);
-            break;
-          case 3:
-            monster = new Alien(this);
-            break;
-          case 4:
-            monster = new Wizard(this);
-            break;
-        }
+        monster = monsterFactory.createMonster(i-1);
         Color c = bg.getColor(charLocation);
         if (!c.equals(Color.gray) && charX >= 0 && charX < nbHorzCells && charY >= 0 && charY < nbVertCells) {
           monsterList.add(monster);
@@ -199,6 +184,7 @@ public class Game extends GameGrid
   private void setupItem() {
     String itemLocationString;
     String[] itemLocations;
+    ItemFactory itemFactory = new ItemFactory();
     int itemX, itemY;
 
     for (int i = 0; i < itemKeyword.length; i++) {
@@ -208,19 +194,13 @@ public class Game extends GameGrid
         for (String singleItemLocation: itemLocations) {
           itemX = Integer.parseInt(singleItemLocation.split(",")[0]);
           itemY = Integer.parseInt(singleItemLocation.split(",")[1]);
-          switch (i) {
-            case 0:
-              itemList.add(new Pill(new Location(itemX, itemY)));
-              propertyPillNumber++;
-              break;
-            case 1:
-              itemList.add(new Gold(new Location(itemX, itemY)));
-              goldList.add(new Gold(new Location(itemX, itemY)));
-              propertyGoldNumber++;
-              break;
-            case 2:
-              itemList.add(new Ice(new Location(itemX, itemY)));
-              break;
+          Item item = itemFactory.createItem(i, new Location(itemX, itemY));
+          itemList.add(item);
+          if (item.getItemType() == ItemType.PILL) {
+            propertyPillNumber++;
+          }
+          if (item.getItemType() == ItemType.GOLD) {
+            propertyGoldNumber++;
           }
         }
       }
@@ -232,17 +212,26 @@ public class Game extends GameGrid
       for (int x = 0; x < nbHorzCells; x++)
       {
         Location location = new Location(x, y);
+        Item item = null;
         int a = grid.getCell(location);
         if (a == 1 && propertyPillNumber == 0) {
-          itemList.add(new Pill(location));
+//          itemList.add(new Pill(location));
+          item = itemFactory.createItem(0, location);
         }
         if (a == 3 &&  propertyGoldNumber == 0) {
-          itemList.add(new Gold(location));
+          //itemList.add(new Gold(location));
+          item = itemFactory.createItem(1, location);
+          //goldList.add(item);
           goldList.add(new Gold(location));
         }
         if (a == 4) {
-          itemList.add(new Ice(location));
+//          itemList.add(new Ice(location));
+          item = itemFactory.createItem(2, location);
         }
+        if (item != null) {
+          itemList.add(item);
+        }
+
       }
     }
 
