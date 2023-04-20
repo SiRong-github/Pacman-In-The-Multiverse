@@ -4,10 +4,10 @@ import ch.aplu.jgamegrid.Location;
 import src.Items.Item;
 import src.Items.ItemType;
 
-public class Pill extends Item {
-    private static ItemType itemType = ItemType.PILL;
+public class Pill {
+    private Location location;
 
     public Pill(Location location) {
-        super(location, itemType);
+        this.location = location;
     }
 }

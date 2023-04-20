@@ -96,6 +96,12 @@ public class Game extends GameGrid
     delay(120);
 
     // if YES, stop the game
+    gameFinished(bg, hasPacmanBeenHit, hasPacmanEatAllPills);
+
+    doPause();
+  }
+
+  public void gameFinished(GGBackground bg, boolean hasPacmanBeenHit, boolean hasPacmanEatAllPills) {
     Location loc = pacActor.getLocation();
     for (Monster monster: monsterList) {
       monster.setStopMoving(true);
@@ -114,8 +120,6 @@ public class Game extends GameGrid
     }
     setTitle(title);
     gameCallback.endOfGame(title);
-
-    doPause();
   }
 
   public GameCallback getGameCallback() {

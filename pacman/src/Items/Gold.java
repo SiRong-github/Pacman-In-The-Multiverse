@@ -8,7 +8,7 @@ public class Gold extends Item {
     private static ItemType itemType = ItemType.GOLD;
 
     public Gold(Location location) {
-        super(location, itemType, image);
+        super(itemType, image);
     }
 
     public boolean isOrionVisited() {
