@@ -1,5 +1,6 @@
-package src;
+package src.Monster;
 
+import src.Game;
 import src.Monster.*;
 
 public class MonsterFactory {

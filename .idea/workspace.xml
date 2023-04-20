@@ -7,16 +7,9 @@
     <list default="true" id="e5e8f3ce-d126-4688-88ad-6d938061ca8d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pacman/properties/test5.properties" beforeDir="false" afterPath="$PROJECT_DIR$/pacman/properties/test5.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pacman/src/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/pacman/src/Game.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pacman/src/ItemFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/pacman/src/ItemFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pacman/src/Items/Gold.java" beforeDir="false" afterPath="$PROJECT_DIR$/pacman/src/Items/Gold.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pacman/src/Items/Ice.java" beforeDir="false" afterPath="$PROJECT_DIR$/pacman/src/Items/Ice.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pacman/src/Items/Item.java" beforeDir="false" afterPath="$PROJECT_DIR$/pacman/src/Items/Item.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pacman/src/Items/Pill.java" beforeDir="false" afterPath="$PROJECT_DIR$/pacman/src/Items/Pill.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pacman/src/Monster/Monster.java" beforeDir="false" afterPath="$PROJECT_DIR$/pacman/src/Monster/Monster.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pacman/src/Monster/Orion.java" beforeDir="false" afterPath="$PROJECT_DIR$/pacman/src/Monster/Orion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pacman/src/Monster/TX5.java" beforeDir="false" afterPath="$PROJECT_DIR$/pacman/src/Monster/TX5.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pacman/src/PacActor.java" beforeDir="false" afterPath="$PROJECT_DIR$/pacman/src/PacActor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pacman/src/ItemFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/pacman/src/Items/ItemFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pacman/src/Monster/Wizard.java" beforeDir="false" afterPath="$PROJECT_DIR$/pacman/src/Monster/Wizard.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pacman/src/MonsterFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/pacman/src/Monster/MonsterFactory.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -62,7 +55,7 @@
       <module name="2023-sem1-projectassignment1-tue-17-15-team-05" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="src.*" />
+          <option name="PATTERN" value="src.Monster.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
