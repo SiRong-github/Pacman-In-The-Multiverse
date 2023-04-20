@@ -10,6 +10,7 @@ public class Wizard extends Monster {
     private Location.CompassDirection direction;
     private ArrayList<Location> neighbours = new ArrayList<>();
     private Location next = null;
+    private Location furiousNext = null;
 
 
     /* Randomiser */
@@ -31,40 +32,59 @@ public class Wizard extends Monster {
         neighbours = wizardLoc.getNeighbourLocations(1);
         int chosen = getRandomiser().nextInt(neighbours.size());
         next = neighbours.get(chosen);
+        furiousNext = getLocation().getNeighbourLocation(chosen);
 
+        /* Check if furious state */
 
         /* The neighbour is not a wall */
-        if(canMove(next)){
-            //move to the location
-            setLocation(next);
-        //the neighbour is a wall
-        }else{
+        if (canMove(next)) {
+            if (!isFuriousState()) {
+                //move to the location
+                setLocation(next);
+            }else {
+                next = randomWalk(chosen);
+                setLocation(next);
+            }
+        }else {
+            //the neighbour is a wall
             Color c = getBackground().getColor(next);
+
             if (c.equals(Color.gray)) { //wall
                 Location.CompassDirection direction = wizardLoc.getCompassDirectionTo(next);
-                /* Check if not outside of grid */
-               // if (next.getX() < game.getNumHorzCells() && next.getY() < game.getNumVertCells()) {
-                    /* Get direction */
-                    Location adjacentLocation = next.getAdjacentLocation(direction);
-                    if (canMove(adjacentLocation)) {
+                /* Get direction */
+                Location adjacentLocation = next.getAdjacentLocation(direction);
+
+                if (canMove(adjacentLocation)) {
+                    if (!isFuriousState()) {
                         //not wall
                         setLocation(adjacentLocation);
                     } else {
-                        chosen = getRandomiser().nextInt(neighbours.size());
-                        for (Location n: neighbours) {
+                        next = randomWalk(chosen);
+                        setLocation(next);
+                    }
+                } else {
+                    chosen = getRandomiser().nextInt(neighbours.size());
+                    for (Location n : neighbours) {
+                        if (!isFuriousState()) {
                             next = neighbours.get(chosen);
-                            if(canMove(next)){
+                            if (canMove(next)) {
                                 setLocation(next);
                                 break;
                             }
+                        } else {
+                            next = randomWalk(chosen);
+                            if (canMove(next)) {
+                                setLocation(next);
+                                break;
+                            }
+
                         }
                     }
-
                 }
-
             }
-        getGame().getGameCallback().monsterLocationChanged(this);
         }
+        getGame().getGameCallback().monsterLocationChanged(this);
+    }
 }
 
 
