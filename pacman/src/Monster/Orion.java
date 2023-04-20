@@ -8,13 +8,12 @@ import java.util.ArrayList;
 
 public class Orion extends Monster {
     private Gold targetGold = null;
-    private boolean isMoveAround = false;
-    private Location lastVisitedLocation = null;
+    private static int listLength = 20;
     private static String image = "sprites/m_orion.gif";
     private static MonsterType monsterType = MonsterType.ORION;
 
     public Orion(Game game) {
-        super(game, monsterType, image);
+        super(game, monsterType, image, listLength);
     }
 
     /* Orion walking approach:
@@ -32,6 +31,7 @@ public class Orion extends Monster {
         if (targetGold == null) {
             // check if all gold is visited or not, if YES start over the search again (reset orionVisitedFlag)
             int orionVisitedGoldTotal = 0;
+
             for (Gold gold : getGame().getGoldList()) {
                 if (gold.isOrionVisited()) {
                     orionVisitedGoldTotal++;
@@ -64,7 +64,7 @@ public class Orion extends Monster {
             targetGold = priorityGoldList.remove(goldVisitedIndex);
         }
 
-        Location targetGoldLocation = targetGold.getLocation();
+        Location targetGoldLocation = targetGold.getInitialLocation();
         double oldDirection = getDirection();
         Location.CompassDirection goldCompassDir = getLocation().get4CompassDirectionTo(targetGoldLocation);
         Location next = getLocation().getNeighbourLocation(goldCompassDir);
@@ -89,20 +89,12 @@ public class Orion extends Monster {
         }
         getGame().getGameCallback().monsterLocationChanged(this);
         addVisitedList(next);
-        System.out.println("target gold location: " + targetGoldLocation);
+        System.out.println("Orion Target Gold: "+targetGoldLocation);
 
         if (getLocation().equals(targetGoldLocation)) {
             targetGold.setOrionVisited(true);
             targetGold = null;
         }
-    }
-
-    @Override
-    protected void addVisitedList(Location location)
-    {
-        getVisitedList().add(location);
-        if (getVisitedList().size() == 20)
-            getVisitedList().remove(0);
     }
 }
 

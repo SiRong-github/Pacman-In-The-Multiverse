@@ -1,4 +1,4 @@
-package src.Items;
+package src;
 
 import ch.aplu.jgamegrid.Location;
 import src.Items.Item;
@@ -9,5 +9,9 @@ public class Pill {
 
     public Pill(Location location) {
         this.location = location;
+    }
+
+    public Location getLocation() {
+        return location;
     }
 }

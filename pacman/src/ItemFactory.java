@@ -10,7 +10,6 @@ public class ItemFactory {
 
     public Item createItem(int index, Location location) {
         Item item = switch (index) {
-            case 0 -> new Pill(location);
             case 1 -> new Gold(location);
             case 2 -> new Ice(location);
             default -> null;

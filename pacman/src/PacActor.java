@@ -38,7 +38,6 @@ public class PacActor extends Actor implements GGKeyRepeatListener
     isAuto = auto;
   }
 
-
   public void setSeed(int seed) {
     this.seed = seed;
     randomiser.setSeed(seed);
