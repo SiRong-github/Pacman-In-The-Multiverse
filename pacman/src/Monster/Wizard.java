@@ -1,9 +1,12 @@
 package src.Monster;
+import src.Game;
 import ch.aplu.jgamegrid.*;
 import java.util.ArrayList;
-import java.util.List;
 import java.awt.*;
-import src.Game;
+
+/**
+ *Wizard class
+ */
 
 public class Wizard extends Monster {
     private static String image = "sprites/m_wizard.gif";
@@ -13,12 +16,7 @@ public class Wizard extends Monster {
     private Location next = null;
     private Location furiousNext = null;
 
-
-    /* Randomiser */
-
-    public Wizard(Game game) {
-        super(game, monsterType, image);
-    }
+    public Wizard(Game game) {super(game, monsterType, image);}
 
     private Location getNeighbours() {
         Location neighbourLocation = null;
@@ -33,7 +31,7 @@ public class Wizard extends Monster {
         neighbours = wizardLoc.getNeighbourLocations(1);
         int chosen = getRandomiser().nextInt(neighbours.size());
         next = neighbours.get(chosen);
-        furiousNext = getLocation().getNeighbourLocation(chosen);
+        furiousNext = next.getAdjacentLocation(chosen);
 
         /* Check if furious state */
 
@@ -43,25 +41,35 @@ public class Wizard extends Monster {
                 //move to the location
                 setLocation(next);
             }else {
-                next = randomWalk(chosen);
-                setLocation(next);
+                setLocation(furiousNext);
             }
         }else {
             //the neighbour is a wall
             Color c = getBackground().getColor(next);
 
             if (c.equals(Color.gray)) { //wall
-                Location.CompassDirection direction = wizardLoc.getCompassDirectionTo(next);
+                Location.CompassDirection direction = next.getCompassDirectionTo(wizardLoc);
                 /* Get direction */
                 Location adjacentLocation = next.getAdjacentLocation(direction);
+                Location furiousAdjacent = adjacentLocation.getAdjacentLocation(direction);
 
                 if (canMove(adjacentLocation)) {
                     if (!isFuriousState()) {
                         //not wall
                         setLocation(adjacentLocation);
                     } else {
-                        next = randomWalk(chosen);
-                        setLocation(next);
+                        if(canMove(furiousAdjacent)){
+                            setLocation(furiousAdjacent);
+                        }else{
+                            chosen = getRandomiser().nextInt(neighbours.size());
+                            for (Location n : neighbours) {
+                                furiousNext = neighbours.get(chosen);
+                                if (canMove(furiousNext)) {
+                                    setLocation(furiousNext);
+                                    break;
+                                }
+                            }
+                        }
                     }
                 } else {
                     chosen = getRandomiser().nextInt(neighbours.size());
@@ -73,9 +81,9 @@ public class Wizard extends Monster {
                                 break;
                             }
                         } else {
-                            next = randomWalk(chosen);
-                            if (canMove(next)) {
-                                setLocation(next);
+                            furiousNext = neighbours.get(chosen);
+                            if (canMove(furiousNext)) {
+                                setLocation(furiousNext);
                                 break;
                             }
 
