@@ -17,8 +17,6 @@ public class Alien extends Monster {
     private ArrayList<Location> shortestNeighbours = new ArrayList<>();
     private Location next = null;
 
-
-
     /**
      * Initialise alien class
      * Input: game
@@ -58,13 +56,19 @@ public class Alien extends Monster {
                 }
                 if (secondNext.x != -1 && secondNext.y != -1) {
                     next = secondNext;
+                    setLocation(next);
                     break;
                 }
             }
+            /* Check if secondNext is null */
+            if (secondNext.x == -1 && secondNext.y == -1) {
+                setLocation(currentLocation);
+            }
+        } else {
+            /* Set new location */
+            setLocation(next);
         }
 
-        /* Set new location */
-        setLocation(next);
         getGame().getGameCallback().monsterLocationChanged(this);
     }
 
