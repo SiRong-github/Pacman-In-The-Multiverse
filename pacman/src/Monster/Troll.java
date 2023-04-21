@@ -13,7 +13,7 @@ public class Troll extends Monster {
         super(game, monsterType, image);
     }
 
-    // TX-5 walking approach: Determine direction to pacActor and try to move in that direction. Otherwise, random walk.
+    // Troll walking approach: random walk.
     protected void walkApproach()
     {
         double oldDirection = getDirection();

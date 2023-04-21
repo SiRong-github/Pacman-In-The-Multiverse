@@ -4,12 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e5e8f3ce-d126-4688-88ad-6d938061ca8d" name="Changes" comment="">
+    <list default="true" id="01a7a9d5-2900-4642-b9e9-30fd3620210e" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pacman/properties/test5.properties" beforeDir="false" afterPath="$PROJECT_DIR$/pacman/properties/test5.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pacman/src/ItemFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/pacman/src/Items/ItemFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pacman/src/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/pacman/src/Game.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pacman/src/Monster/Alien.java" beforeDir="false" afterPath="$PROJECT_DIR$/pacman/src/Monster/Alien.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pacman/src/Monster/Orion.java" beforeDir="false" afterPath="$PROJECT_DIR$/pacman/src/Monster/Orion.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pacman/src/Monster/Wizard.java" beforeDir="false" afterPath="$PROJECT_DIR$/pacman/src/Monster/Wizard.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pacman/src/MonsterFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/pacman/src/Monster/MonsterFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pacman/src/PacActor.java" beforeDir="false" afterPath="$PROJECT_DIR$/pacman/src/PacActor.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -92,7 +94,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="test1" />
+                        <option value="mainv3" />
                       </list>
                     </value>
                   </entry>

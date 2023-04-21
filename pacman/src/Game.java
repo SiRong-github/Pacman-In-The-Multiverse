@@ -75,11 +75,7 @@ public class Game extends GameGrid
 
     //Run the game
     doRun();
-    // show the gameGrid window after initialization
     show();
-
-    // Loop to look for collision in the application thread
-    // This makes it improbable that we miss a hit
     boolean hasPacmanBeenHit = false;
     boolean hasPacmanEatAllPills;
     int maxPillsAndItems = countPillsAndItems();
@@ -98,29 +94,14 @@ public class Game extends GameGrid
 
     // if YES, stop the game
     gameFinished(bg, hasPacmanBeenHit, hasPacmanEatAllPills);
-
     doPause();
   }
 
-  public void gameFinished(GGBackground bg, boolean hasPacmanBeenHit, boolean hasPacmanEatAllPills) {
-    Location loc = pacActor.getLocation();
-    for (Monster monster: monsterList) {
-      monster.setStopMoving(true);
-    }
-    pacActor.removeSelf();
-
-    // render WIN/LOSE game & stop running the game
-    String title = "";
-    if (hasPacmanBeenHit) {
-      bg.setPaintColor(Color.red);
-      title = "GAME OVER";
-      addActor(new Actor("sprites/explosion3.gif"), loc);
-    } else if (hasPacmanEatAllPills) {
-      bg.setPaintColor(Color.yellow);
-      title = "YOU WIN";
-    }
-    setTitle(title);
-    gameCallback.endOfGame(title);
+  public int getNumHorzCells(){
+    return this.nbHorzCells;
+  }
+  public int getNumVertCells(){
+    return this.nbVertCells;
   }
 
   public GameCallback getGameCallback() {
@@ -301,10 +282,25 @@ public class Game extends GameGrid
     }
   }
 
-  public int getNumHorzCells(){
-    return this.nbHorzCells;
-  }
-  public int getNumVertCells(){
-    return this.nbVertCells;
+  public void gameFinished(GGBackground bg, boolean hasPacmanBeenHit, boolean hasPacmanEatAllPills) {
+    // stop all character
+    Location loc = pacActor.getLocation();
+    for (Monster monster: monsterList) {
+      monster.setStopMoving(true);
+    }
+    pacActor.removeSelf();
+
+    // render WIN/LOSE game & stop running the game
+    String title = "";
+    if (hasPacmanBeenHit) {
+      bg.setPaintColor(Color.red);
+      title = "GAME OVER";
+      addActor(new Actor("sprites/explosion3.gif"), loc);
+    } else if (hasPacmanEatAllPills) {
+      bg.setPaintColor(Color.yellow);
+      title = "YOU WIN";
+    }
+    setTitle(title);
+    gameCallback.endOfGame(title);
   }
 }

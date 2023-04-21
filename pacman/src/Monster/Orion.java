@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 public class Orion extends Monster {
     private Gold targetGold = null;
+    private ArrayList<Gold> goldList = new ArrayList<Gold>();
     private static int listLength = 20;
     private static String image = "sprites/m_orion.gif";
     private static MonsterType monsterType = MonsterType.ORION;

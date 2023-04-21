@@ -19,6 +19,7 @@ public class PacActor extends Actor implements GGKeyRepeatListener
   private int idSprite = 0;
   private int nbPills = 0;
   private int score = 0;
+  private boolean isAuto = false;
   private Game game;
   private ArrayList<Location> visitedList = new ArrayList<Location>();
   private List<String> propertyMoves = new ArrayList<>();
@@ -32,7 +33,10 @@ public class PacActor extends Actor implements GGKeyRepeatListener
     super(true, "sprites/pacpix.gif", nbSprites);  // Rotatable
     this.game = game;
   }
-  private boolean isAuto = false;
+
+  public int getNbPills() {
+    return nbPills;
+  }
 
   public void setAuto(boolean auto) {
     isAuto = auto;
@@ -210,10 +214,6 @@ public class PacActor extends Actor implements GGKeyRepeatListener
       return false;
     else
       return true;
-  }
-
-  public int getNbPills() {
-    return nbPills;
   }
 
   // function for PacMan to eat item, update score & number of item ate, update cell color (remove item), and update score

@@ -17,20 +17,12 @@ public class Wizard extends Monster {
         super(game, monsterType, image);
     }
 
-    private Location getNeighbours() {
-        Location neighbourLocation = null;
-        ArrayList<Location> neighbours = new ArrayList<Location>();
-        neighbours = getLocation().getNeighbourLocations(1);
-        neighbourLocation = getNeighbours();
-        return neighbourLocation;
-    }
-
     protected void walkApproach() {
         Location wizardLoc = getLocation();
         neighbours = wizardLoc.getNeighbourLocations(1);
         int chosen = getRandomiser().nextInt(neighbours.size());
         next = neighbours.get(chosen);
-        Location.CompassDirection direction = wizardLoc.getCompassDirectionTo(next);
+        direction = wizardLoc.getCompassDirectionTo(next);
 
         /* Check if furious state */
         if (!isFuriousState()) {
@@ -44,7 +36,7 @@ public class Wizard extends Monster {
                     if (canMove(adjacentLocation)) {
                         setLocation(adjacentLocation);
                     } else {
-                        Location nextNeighbour = getAnotherNeighbour(adjacentLocation);
+                        Location nextNeighbour = getAnotherNeighbour(wizardLoc);
                         setLocation(nextNeighbour);
                     }
                 }
@@ -60,7 +52,7 @@ public class Wizard extends Monster {
                     if (canMove(adjacentLocation)) {
                         setLocation(adjacentLocation);
                     } else {
-                        Location nextNeighbour = getAnotherNeighbour(adjacentLocation);
+                        Location nextNeighbour = getAnotherNeighbour(wizardLoc);
                         setLocation(nextNeighbour);
                     }
                 }
@@ -71,8 +63,7 @@ public class Wizard extends Monster {
     }
 
 
-    protected Location getAdjacentLocation(Location initialLocation, Location nextLocation) {
-        //the neighbour is a wall
+    private Location getAdjacentLocation(Location initialLocation, Location nextLocation) {
         /* Get direction */
         Location.CompassDirection direction = initialLocation.getCompassDirectionTo(nextLocation);
         Location adjacentLocation = next.getAdjacentLocation(direction, 1);
@@ -80,9 +71,8 @@ public class Wizard extends Monster {
 
     }
 
-    protected Location getAnotherNeighbour(Location location) {
-
-        //neighbours = location.getNeighbourLocations(1);
+    private Location getAnotherNeighbour(Location location) {
+        neighbours = location.getNeighbourLocations(1);
         Location next = null;
         for (Location n : neighbours) {
             int chosen = getRandomiser().nextInt(neighbours.size());
@@ -91,7 +81,7 @@ public class Wizard extends Monster {
                 return next;
             }
         }
-        return getLocation();
+        return next;
     }
 
 }
