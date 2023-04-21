@@ -240,14 +240,13 @@ public class Game extends GameGrid
       case GOLD:
         bg.setPaintColor(Color.yellow);
         bg.fillCircle(toPoint(item.getInitialLocation()), 5);
-        addActor(item, item.getInitialLocation());
         break;
       case ICE:
         bg.setPaintColor(Color.blue);
         bg.fillCircle(toPoint(item.getInitialLocation()), 5);
-        addActor(item, item.getInitialLocation());
         break;
     }
+    addActor(item, item.getInitialLocation());
   }
 
   private void putPill(GGBackground bg, Pill pill) {
