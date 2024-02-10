@@ -4,28 +4,22 @@ import ch.aplu.jgamegrid.Actor;
 import ch.aplu.jgamegrid.Location;
 
 public class Item extends Actor {
-    private Location location;
     private ItemType itemType;
+    private Location initialLocation;
     private boolean isAvailable = true;
 
-    public Item(Location location, ItemType item) {
-        this.location = location;
-        this.itemType = item;
-    }
-
-    public Item(Location location, ItemType item, String image) {
+    public Item(ItemType item, String image, Location initialLocation) {
         super(image);
-        this.location = location;
         this.itemType = item;
+        this.initialLocation = initialLocation;
     }
 
     public ItemType getItemType() {
         return itemType;
     }
 
-    @Override
-    public Location getLocation() {
-        return location;
+    public Location getInitialLocation() {
+        return initialLocation;
     }
 
     public boolean isAvailable() {
@@ -34,5 +28,10 @@ public class Item extends Actor {
 
     public void setAvailable(boolean available) {
         isAvailable = available;
+    }
+
+    public void hideItem() {
+        this.isAvailable = false;
+        this.hide();
     }
 }
