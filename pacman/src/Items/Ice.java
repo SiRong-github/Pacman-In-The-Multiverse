@@ -7,6 +7,6 @@ public class Ice extends Item {
     private static ItemType itemType = ItemType.ICE;
 
     public Ice(Location location) {
-        super(location, itemType, image);
+        super(itemType, image, location);
     }
 }
