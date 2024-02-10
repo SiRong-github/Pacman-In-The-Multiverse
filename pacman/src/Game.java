@@ -21,6 +21,7 @@ public class Game extends GameGrid
   public PacActor pacActor = new PacActor(this);
 
   private ArrayList<Monster> monsterList = new ArrayList<Monster>();
+  private ArrayList<Pill> pillList = new ArrayList<Pill>();
   private ArrayList<Item> itemList = new ArrayList<Item>();
   private ArrayList<Gold> goldList = new ArrayList<Gold>();
 
@@ -74,11 +75,7 @@ public class Game extends GameGrid
 
     //Run the game
     doRun();
-    // show the gameGrid window after initialization
     show();
-
-    // Loop to look for collision in the application thread
-    // This makes it improbable that we miss a hit
     boolean hasPacmanBeenHit = false;
     boolean hasPacmanEatAllPills;
     int maxPillsAndItems = countPillsAndItems();
@@ -96,38 +93,23 @@ public class Game extends GameGrid
     delay(120);
 
     // if YES, stop the game
-    Location loc = pacActor.getLocation();
-    for (Monster monster: monsterList) {
-      monster.setStopMoving(true);
-    }
-    pacActor.removeSelf();
-
-    // render WIN/LOSE game & stop running the game
-    String title = "";
-    if (hasPacmanBeenHit) {
-      bg.setPaintColor(Color.red);
-      title = "GAME OVER";
-      addActor(new Actor("sprites/explosion3.gif"), loc);
-    } else if (hasPacmanEatAllPills) {
-      bg.setPaintColor(Color.yellow);
-      title = "YOU WIN";
-    }
-    setTitle(title);
-    gameCallback.endOfGame(title);
-
+    gameFinished(bg, hasPacmanBeenHit, hasPacmanEatAllPills);
     doPause();
+  }
+
+  public int getNumHorzCells(){
+    return this.nbHorzCells;
+  }
+  public int getNumVertCells(){
+    return this.nbVertCells;
   }
 
   public GameCallback getGameCallback() {
     return gameCallback;
   }
 
-  public String getCurrentGameVersion() {
-    return currentGameVersion;
-  }
-
-  public static String[] getGameVersion() {
-    return gameVersion;
+  public ArrayList<Item> getItemList() {
+    return itemList;
   }
 
   public ArrayList<Gold> getGoldList() {
@@ -138,7 +120,7 @@ public class Game extends GameGrid
   private void setupActorLocations(GGBackground bg, String version) {
     String[] charLocations;
     int initializeLength, charX, charY;
-    Monster monster = null;
+    MonsterFactory monsterFactory = new MonsterFactory(this);
     Location charLocation;
 
     if (version.equals(gameVersion[1])) {
@@ -155,27 +137,10 @@ public class Game extends GameGrid
       if (i == 0) {
         addActor(pacActor, charLocation);
       } else {
-        switch (i-1) {
-          case 0:
-            monster = new Troll(this);
-            break;
-          case 1:
-            monster = new TX5(this);
-            break;
-          case 2:
-            monster = new Orion(this);
-            break;
-          case 3:
-            monster = new Alien(this);
-            break;
-          case 4:
-            monster = new Wizard(this);
-            break;
-        }
+        Monster monster = monsterFactory.createMonster(i-1);
         Color c = bg.getColor(charLocation);
         if (!c.equals(Color.gray) && charX >= 0 && charX < nbHorzCells && charY >= 0 && charY < nbVertCells) {
           monsterList.add(monster);
-          System.out.println("monster "+monster.getType());
           addActor(monster, charLocation, Location.NORTH);
         }
       }
@@ -185,20 +150,18 @@ public class Game extends GameGrid
   private int countPillsAndItems() {
     int pillsAndItemsCount = 0;
     for (Item item : itemList) {
-      if (item.getItemType() != ItemType.ICE && item.getItemType() != null) {
+      if (item.getItemType() != ItemType.ICE) {
         pillsAndItemsCount++;
       }
     }
+    pillsAndItemsCount += pillList.size();
     return pillsAndItemsCount;
-  }
-
-  public ArrayList<Item> getItemList() {
-    return itemList;
   }
 
   private void setupItem() {
     String itemLocationString;
     String[] itemLocations;
+    ItemFactory itemFactory = new ItemFactory();
     int itemX, itemY;
 
     for (int i = 0; i < itemKeyword.length; i++) {
@@ -208,19 +171,15 @@ public class Game extends GameGrid
         for (String singleItemLocation: itemLocations) {
           itemX = Integer.parseInt(singleItemLocation.split(",")[0]);
           itemY = Integer.parseInt(singleItemLocation.split(",")[1]);
-          switch (i) {
-            case 0:
-              itemList.add(new Pill(new Location(itemX, itemY)));
-              propertyPillNumber++;
-              break;
-            case 1:
-              itemList.add(new Gold(new Location(itemX, itemY)));
-              goldList.add(new Gold(new Location(itemX, itemY)));
+          if (i == 0) {
+            pillList.add(new Pill(new Location(itemX, itemY)));
+            propertyPillNumber++;
+          } else {
+            Item item = itemFactory.createItem(i, new Location(itemX, itemY));
+            itemList.add(item);
+            if (item.getItemType() == ItemType.GOLD) {
               propertyGoldNumber++;
-              break;
-            case 2:
-              itemList.add(new Ice(new Location(itemX, itemY)));
-              break;
+            }
           }
         }
       }
@@ -232,20 +191,23 @@ public class Game extends GameGrid
       for (int x = 0; x < nbHorzCells; x++)
       {
         Location location = new Location(x, y);
+        Item item = null;
         int a = grid.getCell(location);
         if (a == 1 && propertyPillNumber == 0) {
-          itemList.add(new Pill(location));
+          pillList.add(new Pill(location));
         }
         if (a == 3 &&  propertyGoldNumber == 0) {
-          itemList.add(new Gold(location));
+          item = itemFactory.createItem(1, location);
           goldList.add(new Gold(location));
         }
         if (a == 4) {
-          itemList.add(new Ice(location));
+          item = itemFactory.createItem(2, location);
+        }
+        if (item != null) {
+          itemList.add(item);
         }
       }
     }
-
   }
 
   private void drawGrid(GGBackground bg)
@@ -268,58 +230,76 @@ public class Game extends GameGrid
     for (Item item : itemList) {
       putItem(bg, item);
     }
+    for (Pill pill : pillList) {
+      putPill(bg, pill);
+    }
   }
 
   private void putItem(GGBackground bg, Item item) {
     switch (item.getItemType()) {
-      case PILL:
-        bg.setPaintColor(Color.white);
-        bg.fillCircle(toPoint(item.getLocation()), 5);
-        break;
       case GOLD:
         bg.setPaintColor(Color.yellow);
-        bg.fillCircle(toPoint(item.getLocation()), 5);
-        addActor(item, item.getLocation());
+        bg.fillCircle(toPoint(item.getInitialLocation()), 5);
         break;
       case ICE:
         bg.setPaintColor(Color.blue);
-        bg.fillCircle(toPoint(item.getLocation()), 5);
-        addActor(item, item.getLocation());
+        bg.fillCircle(toPoint(item.getInitialLocation()), 5);
         break;
     }
+    addActor(item, item.getInitialLocation());
   }
 
-  public void removeItem(ItemType checkItemType, Location location){
-    for (Item item : itemList){
-      if (item.getItemType() == checkItemType && location.equals(item.getLocation())) {
-        item.setAvailable(false);
-        item.hide();
-        if (item.getItemType() == ItemType.ICE && currentGameVersion.equals(gameVersion[1])) {
-          item.setAvailable(false);
-          for (Monster monster : monsterList) {
-            monster.stopMoving(3);
-          }
-        } else if (item.getItemType() == ItemType.GOLD && currentGameVersion.equals(gameVersion[1])) {
-          item.setAvailable(false);
-          for (Monster monster : monsterList) {
-            monster.enterFurious(3);
+  private void putPill(GGBackground bg, Pill pill) {
+    bg.setPaintColor(Color.white);
+    bg.fillCircle(toPoint(pill.getLocation()), 5);
+  }
+
+  public void removeItem(ItemType checkItemType, Location checkLocation) {
+    for (Item item : itemList) {
+      if (checkLocation.equals(item.getLocation())) {
+        item.hideItem();
+        if (currentGameVersion.equals(gameVersion[1])) {
+          switch (checkItemType) {
+            case GOLD:
+              for (Monster monster : monsterList) {
+                monster.enterFurious(3);
+              }
+              for (Gold gold : goldList) {
+                if (checkLocation.equals(gold.getInitialLocation())) {
+                  gold.setAvailable(false);
+                }
+              }
+              break;
+            case ICE:
+              for (Monster monster : monsterList) {
+                monster.stopMoving(3);
+              }
+              break;
           }
         }
       }
     }
-    if (checkItemType == ItemType.GOLD) {
-      for (Gold gold : goldList) {
-        if (location.equals(gold.getLocation()) && currentGameVersion.equals(gameVersion[1])) {
-          gold.setAvailable(false);
-        }
-      }
-    }
   }
 
-  public int getNumHorzCells(){
-    return this.nbHorzCells;
-  }
-  public int getNumVertCells(){
-    return this.nbVertCells;
+  public void gameFinished(GGBackground bg, boolean hasPacmanBeenHit, boolean hasPacmanEatAllPills) {
+    // stop all character
+    Location loc = pacActor.getLocation();
+    for (Monster monster: monsterList) {
+      monster.setStopMoving(true);
+    }
+    pacActor.removeSelf();
+
+    // render WIN/LOSE game & stop running the game
+    String title = "";
+    if (hasPacmanBeenHit) {
+      bg.setPaintColor(Color.red);
+      title = "GAME OVER";
+      addActor(new Actor("sprites/explosion3.gif"), loc);
+    } else if (hasPacmanEatAllPills) {
+      bg.setPaintColor(Color.yellow);
+      title = "YOU WIN";
+    }
+    setTitle(title);
+    gameCallback.endOfGame(title);
   }
 }
