@@ -125,6 +125,19 @@ Contains the gif images of the game objects.
 
 # Testing
 
+Steps prior to compiling and running:
+1. Download (or clone) the project.
+2. Head to the project directory by writing.
+
+	cd *projectFileLocation*
+ 
+ For example
+ 	
+  	cd Desktop
+
+3. Head to the pacman directory in the project directory.
+	cd pacman
+
 ## Compiling
 
 	javac -cp lib/JGameGrid.jar -d out src/*.java src/*/*.java
