@@ -127,12 +127,12 @@ Contains the gif images of the game objects.
 
 ## Compiling
 
-javac -cp lib/JGameGrid.jar -d out src/*.java src/*/*.java
+	javac -cp lib/JGameGrid.jar -d out src/*.java src/*/*.java
 
 ## Running
 
-java -cp out:lib/JGameGrid.jar:properties:sprites src.Driver properties/*test file*
+	java -cp out:lib/JGameGrid.jar:properties:sprites src.Driver properties/*test file*
 
 For example:
 
-java -cp out:lib/JGameGrid.jar:properties:sprites src.Driver properties/test5.properties
+	java -cp out:lib/JGameGrid.jar:properties:sprites src.Driver properties/test5.properties
