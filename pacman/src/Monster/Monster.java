@@ -17,7 +17,7 @@ public abstract class Monster extends Actor
   private Game game;
   private MonsterType monsterType;
   private ArrayList<Location> visitedList = new ArrayList<Location>();
-  private final int listLength = 10;
+  private int listLength = 10;
   private boolean stopMoving = false;
   private boolean furiousState = false;
   private int seed = 0;
@@ -29,6 +29,15 @@ public abstract class Monster extends Actor
     super(monsterImage);
     this.game = game;
     this.monsterType = monsterType;
+  }
+
+  public Monster(Game game, MonsterType monsterType, String monsterImage, int listLength)
+  {
+    // construct unrotatable Actor
+    super(monsterImage);
+    this.game = game;
+    this.monsterType = monsterType;
+    this.listLength = listLength;
   }
 
   public MonsterType getType() {
@@ -58,10 +67,6 @@ public abstract class Monster extends Actor
 
   public void setStopMoving(boolean stopMoving) {
     this.stopMoving = stopMoving;
-  }
-
-  public void setFuriousState(boolean furiousState) {
-    this.furiousState = furiousState;
   }
 
   public void stopMoving(int seconds) {
@@ -148,15 +153,6 @@ public abstract class Monster extends Actor
       moveTry++;
     }
     return next;
-  }
-
-  protected boolean invalidLocation()
-  {
-    Location location = getLocation();
-    if (canMove(location)) {
-      return false;
-    }
-    return true;
   }
 
   protected void addVisitedList(Location location)
