@@ -17,8 +17,6 @@ public class Alien extends Monster {
     private ArrayList<Location> shortestNeighbours = new ArrayList<>();
     private Location next = null;
 
-
-
     /**
      * Initialise alien class
      * Input: game
@@ -58,13 +56,19 @@ public class Alien extends Monster {
                 }
                 if (secondNext.x != -1 && secondNext.y != -1) {
                     next = secondNext;
+                    setLocation(next);
                     break;
                 }
             }
+            /* Check if secondNext is null */
+            if (secondNext.x == -1 && secondNext.y == -1) {
+                setLocation(currentLocation);
+            }
+        } else {
+            /* Set new location */
+            setLocation(next);
         }
 
-        /* Set new location */
-        setLocation(next);
         getGame().getGameCallback().monsterLocationChanged(this);
     }
 
@@ -73,7 +77,7 @@ public class Alien extends Monster {
      * Input: location of pacman
      * Output: hashmap containing locations and distances of valid neighbours
      */
-    protected ArrayList<ArrayList<Location>> getValidNeighbours(Location pacLocation) {
+    private ArrayList<ArrayList<Location>> getValidNeighbours(Location pacLocation) {
         Map<Location, Integer> validNeighbours = new HashMap<>();
         Set<Integer> set = new LinkedHashSet<>();
         /* Get each valid neighbour and their distances from pacman */
@@ -95,7 +99,7 @@ public class Alien extends Monster {
      * Input: none
      * Output: arraylist of shortest neighbours
      */
-    protected ArrayList<ArrayList<Location>> orderByShortest(Map<Location, Integer> validNeighbours, Set<Integer> set) {
+    private ArrayList<ArrayList<Location>> orderByShortest(Map<Location, Integer> validNeighbours, Set<Integer> set) {
         ArrayList<ArrayList<Location>> orderedNeighbours = new ArrayList<>();
         ArrayList<Integer> sortedValues = new ArrayList<>();
 
@@ -124,7 +128,7 @@ public class Alien extends Monster {
      * Input: none
      * Output: location
      */
-    protected Location getNextLocation(ArrayList<Location> shortestNeighbours) {
+    private Location getNextLocation(ArrayList<Location> shortestNeighbours) {
         /* Check if there is more than one possible location */
         if (shortestNeighbours.size() > 1) {
             /* Randomly select location from the list */
@@ -140,7 +144,7 @@ public class Alien extends Monster {
      * Input:
      * Output: next move if possible, (-1, -1) otherwise
      */
-    protected Location checkNextFuriousLocation(Location currentLocation, Location next) {
+    private Location checkNextFuriousLocation(Location currentLocation, Location next) {
         Location.CompassDirection direction = currentLocation.getCompassDirectionTo(next);
         Location secondNext = next.getNeighbourLocation(direction);
         if (canMove(secondNext)) {
