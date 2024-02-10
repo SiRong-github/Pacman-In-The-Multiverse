@@ -23,7 +23,7 @@ public class TX5 extends Monster {
         Location.CompassDirection compassDir = getLocation().get4CompassDirectionTo(pacLocation);
         Location next = getLocation().getNeighbourLocation(compassDir);
         setDirection(compassDir);
-        if (isFuriousState() == true && getGame().getCurrentGameVersion().equals(getGame().getGameVersion()[1])) {
+        if (isFuriousState() == true) {
             if (canMove(next)) {
                 next = next.getNeighbourLocation(compassDir);
                 if (!isVisited(next) && canMove(next)) {
