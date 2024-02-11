@@ -126,6 +126,9 @@ Contains the gif images of the game objects.
 
     Loads the property file onto the game.
 
+# Demo
+
+https://github.com/SiRong-github/Pacman-In-The-Multiverse/assets/62817554/4125598f-6629-4f3e-9183-f2343e790786
 
 # Testing
 
