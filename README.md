@@ -83,6 +83,10 @@ Contains the test cases.
 
     Tests extended version. test4 is playable while test5 is in Auto-Test mode.
 
+    d. test6.properties
+
+    Tests all aliens in playable mode.
+
 3. sprites
 
 Contains the gif images of the game objects.
@@ -148,4 +152,4 @@ Steps prior to compiling and running:
 
 For example:
 
-	java -cp out:lib/JGameGrid.jar:properties:sprites src.Driver properties/test5.properties
+	java -cp out:lib/JGameGrid.jar:properties:sprites src.Driver properties/test6.properties
