@@ -1,6 +1,10 @@
 # University Subject
 This is a SWEN30006 Software Modelling and Design Project of the University of Melbourne created by a three-person team.
 
+### Demo
+
+https://github.com/SiRong-github/Pacman-In-The-Multiverse/assets/62817554/4125598f-6629-4f3e-9183-f2343e790786
+
 # File Purpose
 The program refactors a provided imitation of the Pacman game called Pacman in the Multiverse to better adhere to the GRASP principles and patterns.
 
@@ -126,9 +130,6 @@ Contains the gif images of the game objects.
 
     Loads the property file onto the game.
 
-# Demo
-
-https://github.com/SiRong-github/Pacman-In-The-Multiverse/assets/62817554/4125598f-6629-4f3e-9183-f2343e790786
 
 # Testing
 
