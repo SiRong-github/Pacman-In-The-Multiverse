@@ -141,7 +141,7 @@ Steps prior to compiling and running:
  
  For example
  	
-  	cd Desktop
+  	cd Desktop/Pacman-In-The-Multiverse
 
 3. Head to the pacman directory in the project directory.
 	cd pacman
